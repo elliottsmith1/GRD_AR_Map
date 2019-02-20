@@ -160,6 +160,14 @@ namespace Mapbox.Unity.MeshGeneration.Factories
 			_directionsGO.AddComponent<MeshRenderer>().material = _material;
 			return _directionsGO;
 		}
+
+        public void NewDestination(Vector3 _pos)
+        {
+            Vector3 pos = _pos;
+            pos.y = 0;
+
+            _waypoints[1].transform.position = pos;
+        }
 	}
 
 }
