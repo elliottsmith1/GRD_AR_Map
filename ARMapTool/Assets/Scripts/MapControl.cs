@@ -3,16 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mapbox.Unity.Map;
 using Mapbox.Unity.MeshGeneration.Factories;
+using Mapbox.Examples;
 
 public class MapControl : MonoBehaviour
 {
+    [SerializeField] TouchCamera camMovement;
     [SerializeField] Camera mapCam;
     [SerializeField] AbstractMap _map;
     [SerializeField] DirectionsFactory _dir;
 
+    [SerializeField] GameObject newDestinationUI;
+    [SerializeField] GameObject locationMarker;
+
     private bool touching = false;
     private float touchTimer = 0.0f;
-    private float touchTimeMax = 1.0f;
+    private float touchTimeMax = 2.0f;
+
+    private Vector3 targetDestination;
+
+    private void Start()
+    {
+        newDestinationUI.SetActive(false);
+    }
 
     private void Update()
     {
@@ -39,16 +51,45 @@ public class MapControl : MonoBehaviour
                 touching = false;
                 touchTimer = 0.0f;
 
-                NewWaypoint(Input.GetTouch(0).position);
+                targetDestination = Input.GetTouch(0).position;
+
+                newDestinationUI.SetActive(true);
+                EnableNewDestinationUI();
             }
         }
     }
 
-    void NewWaypoint(Vector3 _pos)
+    public void NewWaypoint()
     {
-        Vector3 pos = mapCam.ScreenToWorldPoint(_pos);
+        DisableNewDestinationUI();
 
-        _dir.NewDestination(pos);
+        Vector3 _pos = targetDestination;
+
+        Vector3 pos = _pos;
+
+        RaycastHit hit;
+        Ray ray = mapCam.ScreenPointToRay(_pos);
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            pos = hit.point;
+
+            _dir.NewDestination(pos);
+        }        
+    }
+
+    public void EnableNewDestinationUI()
+    {
+        camMovement.enabled = false;
+        
+        locationMarker.transform.position = targetDestination;
+        newDestinationUI.SetActive(true);
+    }
+
+    public void DisableNewDestinationUI()
+    {
+        newDestinationUI.SetActive(false);
+        camMovement.enabled = true;
     }
 
     public void MapZoomIn()

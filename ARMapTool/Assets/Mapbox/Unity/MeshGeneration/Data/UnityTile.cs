@@ -184,7 +184,9 @@ namespace Mapbox.Unity.MeshGeneration.Data
 			gameObject.SetActive(true);
 
 			IsRecycled = false;
-			//MeshRenderer.enabled = true;
+            //MeshRenderer.enabled = true;
+
+            gameObject.AddComponent<BoxCollider>();
 
 
 			// Setup Loading as initial state - Unregistered
