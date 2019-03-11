@@ -170,6 +170,13 @@ namespace Mapbox.Unity.MeshGeneration.Factories
 
         private void CalculateDirection(Mesh _mesh)
         {
+            foreach (GameObject aro in arrows)
+            {
+                Destroy(aro);
+            }
+
+            arrows.Clear();                  
+
             float x = 10;
             Vector3 lastPos = _waypoints[0].position;
             foreach (Vector3 vpos in _mesh.vertices)
@@ -178,7 +185,7 @@ namespace Mapbox.Unity.MeshGeneration.Factories
 
                 Vector3 pos = transform.TransformPoint(vpos);
 
-                if ((Vector3.Distance(lastPos, pos) < x) || (Vector3.Distance(_waypoints[0].position, pos) < x))
+                if (Vector3.Distance(_waypoints[0].position, pos) < x)
                 {
                     isNewturn = false;
                 }
@@ -192,8 +199,10 @@ namespace Mapbox.Unity.MeshGeneration.Factories
                 }
 
                 if (isNewturn)
-                {
+                {                    
                     GameObject arrow = Instantiate(arrowPrefab, pos, Quaternion.identity);
+                    arrow.GetComponent<DirectionalArrow>().SetWorldPos(_map.WorldToGeoPosition(pos));
+                    arrow.GetComponent<DirectionalArrow>().SetMap(_map);
                     arrows.Add(arrow);
 
                     lastPos = pos;
