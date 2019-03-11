@@ -29,7 +29,11 @@ namespace Mapbox.Unity.MeshGeneration.Factories
 		[Range(1,10)]
 		private float UpdateFrequency = 2;
 
-		
+        [SerializeField] GameObject playerRef;
+
+        [SerializeField] GameObject arrowPrefab;
+
+        private List<GameObject> arrows = new List<GameObject>();
 
 		private Directions _directions;
 		private int _counter;
@@ -78,8 +82,8 @@ namespace Mapbox.Unity.MeshGeneration.Factories
 			for (int i = 0; i < count; i++)
 			{
 				wp[i] = _waypoints[i].GetGeoPosition(_map.CenterMercator, _map.WorldRelativeScale);
-			}
-			var _directionResource = new DirectionResource(wp, RoutingProfile.Walking);
+            }
+            var _directionResource = new DirectionResource(wp, RoutingProfile.Walking);
 			_directionResource.Steps = true;
 			_directions.Query(_directionResource, HandleDirectionsResponse);
 		}
@@ -128,7 +132,7 @@ namespace Mapbox.Unity.MeshGeneration.Factories
 				mod.Run(feat, meshData, _map.WorldRelativeScale);
 			}
 
-			CreateGameObject(meshData);
+            CreateGameObject(meshData);
 		}
 
 		GameObject CreateGameObject(MeshData data)
@@ -158,8 +162,59 @@ namespace Mapbox.Unity.MeshGeneration.Factories
 
 			mesh.RecalculateNormals();
 			_directionsGO.AddComponent<MeshRenderer>().material = _material;
+
+            CalculateDirection(_directionsGO.GetComponent<MeshFilter>().mesh);
+
 			return _directionsGO;
 		}
+
+        private void CalculateDirection(Mesh _mesh)
+        {
+            float x = 10;
+            Vector3 lastPos = _waypoints[0].position;
+            foreach (Vector3 vpos in _mesh.vertices)
+            {
+                bool isNewturn = true;
+
+                Vector3 pos = transform.TransformPoint(vpos);
+
+                if ((Vector3.Distance(lastPos, pos) < x) || (Vector3.Distance(_waypoints[0].position, pos) < x))
+                {
+                    isNewturn = false;
+                }
+
+                foreach (GameObject aro in arrows)
+                {
+                    if (Vector3.Distance(pos, aro.transform.position) < x)
+                    {
+                        isNewturn = false;
+                    }
+                }
+
+                if (isNewturn)
+                {
+                    GameObject arrow = Instantiate(arrowPrefab, pos, Quaternion.identity);
+                    arrows.Add(arrow);
+
+                    lastPos = pos;
+                }
+            }
+
+            for (int i = 0; i < arrows.Count; i++)
+            {
+                if (i > 0)
+                {
+                    if (i < arrows.Count)
+                    {
+                        arrows[i - 1].GetComponent<DirectionalArrow>().SetNextPos(arrows[i].transform.position);
+                    }
+                    else
+                    {
+                        Destroy(arrows[i]);
+                    }
+                }
+            }
+        }
 
         public void NewDestination(Vector3 _pos)
         {
