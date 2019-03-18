@@ -232,6 +232,16 @@ namespace Mapbox.Unity.MeshGeneration.Factories
 
             _waypoints[1].transform.position = pos;
         }
+
+        public Vector3 GetFirstArrowPosition()
+        {
+            if (arrows.Count > 0)
+            {
+                return arrows[0].transform.position;
+            }
+
+            return Vector3.zero;
+        }
 	}
 
 }

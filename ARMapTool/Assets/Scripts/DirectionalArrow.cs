@@ -16,7 +16,10 @@ public class DirectionalArrow : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        if (_map)
+        {
+            worldPos = _map.WorldToGeoPosition(transform.position);
+        }
     }
 
     // Update is called once per frame
@@ -24,10 +27,10 @@ public class DirectionalArrow : MonoBehaviour
     {
         transform.localPosition = _map.GeoToWorldPosition(worldPos, true);
 
-        Vector3 newPos = transform.position;
-        newPos.y = Mathf.Sin(Time.time) + intensity;
+        //Vector3 newPos = transform.position;
+        //newPos.y = Mathf.Sin(Time.time) + intensity;
 
-        transform.position = newPos;
+        //transform.position = newPos;
 
         transform.LookAt(nextPos);
     }
