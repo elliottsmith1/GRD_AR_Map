@@ -10,8 +10,13 @@ public class DirectionalArrow : MonoBehaviour
 
     [SerializeField] AbstractMap _map;
 
+    private GameObject user;
+
     private Vector3 nextPos;
     private Vector2d worldPos;
+
+    private bool activated = false;
+    private bool queueForDestroy = false;
 
     // Start is called before the first frame update
     void Start()
@@ -19,6 +24,11 @@ public class DirectionalArrow : MonoBehaviour
         if (_map)
         {
             worldPos = _map.WorldToGeoPosition(transform.position);
+        }
+
+        foreach (Transform child in transform)
+        {
+            //child.gameObject.GetComponent<MeshRenderer>().enabled = false;
         }
     }
 
@@ -33,6 +43,48 @@ public class DirectionalArrow : MonoBehaviour
         //transform.position = newPos;
 
         transform.LookAt(nextPos);
+
+        if (!activated)
+        {
+            if (Vector3.Distance(user.transform.position, transform.position) < 10)
+            {
+                Activate();
+            }
+        }
+        else
+        {
+            if (Vector3.Distance(user.transform.position, transform.position) > 10)
+            {
+                if (queueForDestroy)
+                {
+                    Destroy(this.gameObject);
+                }
+                else
+                {
+                    Deactivate();
+                }
+            }
+        }
+    }
+
+    private void Activate()
+    {
+        activated = true;
+
+        foreach (Transform child in transform)
+        {
+            child.gameObject.GetComponent<MeshRenderer>().enabled = true;
+        }
+    }
+
+    private void Deactivate()
+    {
+        activated = false;
+
+        foreach (Transform child in transform)
+        {
+            child.gameObject.GetComponent<MeshRenderer>().enabled = false;
+        }
     }
 
     public void SetNextPos(Vector3 _pos)
@@ -48,5 +100,20 @@ public class DirectionalArrow : MonoBehaviour
     public void SetMap (AbstractMap map)
     {
         _map = map;
+    }
+
+    public void SetUser(GameObject _user)
+    {
+        user = _user;
+    }
+
+    public bool GetActivated()
+    {
+        return activated;
+    }
+
+    public void SetQueueForDestroy(bool _queue)
+    {
+        queueForDestroy = _queue;
     }
 }

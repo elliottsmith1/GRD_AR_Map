@@ -172,12 +172,19 @@ namespace Mapbox.Unity.MeshGeneration.Factories
         {
             foreach (GameObject aro in arrows)
             {
-                Destroy(aro);
+                if (!aro.GetComponent<DirectionalArrow>().GetActivated())
+                {
+                    Destroy(aro);
+                }
+                else
+                {
+                    aro.GetComponent<DirectionalArrow>().SetQueueForDestroy(true);
+                }
             }
 
             arrows.Clear();                  
 
-            float x = 10;
+            float x = 5;
             Vector3 lastPos = _waypoints[0].position;
             foreach (Vector3 vpos in _mesh.vertices)
             {
@@ -203,6 +210,7 @@ namespace Mapbox.Unity.MeshGeneration.Factories
                     GameObject arrow = Instantiate(arrowPrefab, pos, Quaternion.identity);
                     arrow.GetComponent<DirectionalArrow>().SetWorldPos(_map.WorldToGeoPosition(pos));
                     arrow.GetComponent<DirectionalArrow>().SetMap(_map);
+                    arrow.GetComponent<DirectionalArrow>().SetUser(playerRef);
                     arrows.Add(arrow);
 
                     lastPos = pos;

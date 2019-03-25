@@ -25,8 +25,8 @@ namespace Mapbox.Unity.Ar
 			{
 				var t = _followFactor * Time.deltaTime;
 				_transform.SetPositionAndRotation(
-					Vector3.Lerp(_transform.localPosition, _targetPosition, t),
-					Quaternion.Lerp(_transform.localRotation, _targetRotation, t));
+					Vector3.Lerp(_transform.localPosition, _targetPosition, t), _targetRotation
+                    /*Quaternion.Lerp(_transform.localRotation, _targetRotation, t)*/);
 				_isAlignmentAvailable = false;
 			}
 
