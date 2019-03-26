@@ -59,10 +59,10 @@ namespace Mapbox.Unity.Ar
 				_targetPosition = alignment.Position;
 
 				// HACK: Undo the original expected position.
-				_targetPosition = Quaternion.Euler(0, -rotation, 0) * _targetPosition;
+				//_targetPosition = Quaternion.Euler(0, -rotation, 0) * _targetPosition;
 
 				// Add our averaged rotation.
-				_targetPosition = Quaternion.Euler(0, _averageRotation, 0) * _targetPosition;
+				//_targetPosition = Quaternion.Euler(0, _averageRotation, 0) * _targetPosition;
 			}
 			else
 			{
@@ -75,8 +75,8 @@ namespace Mapbox.Unity.Ar
 		{
 			var t = _lerpSpeed * Time.deltaTime;
 			_transform.SetPositionAndRotation(
-				Vector3.Lerp(_transform.localPosition, _targetPosition, t),
-				Quaternion.Lerp(_transform.localRotation, _targetRotation, t));
+				Vector3.Lerp(_transform.localPosition, _targetPosition, t), _transform.localRotation
+                /*Quaternion.Lerp(_transform.localRotation, _targetRotation, t)*/);
 		}
 	}
 }
