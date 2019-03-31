@@ -5,6 +5,7 @@ using UnityEngine.Networking;
 
 using UnityARInterface;
 using Mapbox.Unity.Location;
+using Mapbox.Unity.Utilities;
 
 
 
@@ -112,7 +113,8 @@ public class ARCameraCompassAlignment : MonoBehaviour
             float worldY = this.arController.arCamera.transform.eulerAngles.y;
             float worldDiff = Mathf.Abs(Mathf.DeltaAngle(this.CompassOrientation, worldY));
 
-            if (this.CompassAccuracy <= 25 && worldDiff > 20)
+            //if (this.CompassAccuracy <= 25 && worldDiff > 20)
+            if (worldDiff > 30)
             {
                 return true;
             }

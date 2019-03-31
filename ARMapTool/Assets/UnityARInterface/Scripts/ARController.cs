@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Mapbox.Unity.Utilities;
 
 #if UNITY_EDITOR
 using UnityEngine.Networking.PlayerConnection;

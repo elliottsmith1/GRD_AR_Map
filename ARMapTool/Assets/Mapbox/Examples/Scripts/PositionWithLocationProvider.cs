@@ -75,12 +75,12 @@ namespace Mapbox.Examples
 			if (_isInitialized && location.IsLocationUpdated)
 			{
 				_targetPosition = _map.GeoToWorldPosition(location.LatitudeLongitude);
-			}
+            }
 		}
 
 		void Update()
 		{
 			transform.localPosition = Vector3.Lerp(transform.localPosition, _targetPosition, Time.deltaTime * _positionFollowFactor);
-		}
-	}
+        }
+    }
 }
