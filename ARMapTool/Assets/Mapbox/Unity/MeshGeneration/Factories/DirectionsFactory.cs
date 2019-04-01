@@ -225,6 +225,7 @@ namespace Mapbox.Unity.MeshGeneration.Factories
 
                     if (spawn)
                     {
+                        pos.y = playerRef.transform.position.y;
                         GameObject arrow = Instantiate(arrowPrefab, pos, Quaternion.identity);
                         arrow.GetComponent<DirectionalArrow>().SetWorldPos(_map.WorldToGeoPosition(pos));
                         arrow.GetComponent<DirectionalArrow>().SetMap(_map);
