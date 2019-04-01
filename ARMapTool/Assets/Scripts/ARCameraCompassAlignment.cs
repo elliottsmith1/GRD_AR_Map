@@ -113,8 +113,7 @@ public class ARCameraCompassAlignment : MonoBehaviour
             float worldY = this.arController.arCamera.transform.eulerAngles.y;
             float worldDiff = Mathf.Abs(Mathf.DeltaAngle(this.CompassOrientation, worldY));
 
-            //if (this.CompassAccuracy <= 25 && worldDiff > 20)
-            if (worldDiff > 30)
+            if (this.CompassAccuracy <= 30 && worldDiff > 30)
             {
                 return true;
             }

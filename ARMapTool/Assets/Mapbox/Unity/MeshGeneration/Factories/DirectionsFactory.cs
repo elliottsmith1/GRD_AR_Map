@@ -142,6 +142,7 @@ namespace Mapbox.Unity.MeshGeneration.Factories
 				Destroy(_directionsGO);
 			}
 			_directionsGO = new GameObject("direction waypoint " + " entity");
+            _directionsGO.layer = 9;
 			var mesh = _directionsGO.AddComponent<MeshFilter>().mesh;
 			mesh.subMeshCount = data.Triangles.Count;
 
@@ -206,14 +207,31 @@ namespace Mapbox.Unity.MeshGeneration.Factories
                 }
 
                 if (isNewturn)
-                {                    
-                    GameObject arrow = Instantiate(arrowPrefab, pos, Quaternion.identity);
-                    arrow.GetComponent<DirectionalArrow>().SetWorldPos(_map.WorldToGeoPosition(pos));
-                    arrow.GetComponent<DirectionalArrow>().SetMap(_map);
-                    arrow.GetComponent<DirectionalArrow>().SetUser(playerRef);
-                    arrows.Add(arrow);
+                {
+                    bool spawn = true;
 
-                    lastPos = pos;
+                    Collider[] hitColliders = Physics.OverlapSphere(pos, 5);
+                    foreach (Collider col in hitColliders)
+                    {
+                        if (col.gameObject != this.gameObject)
+                        {
+                            if (col.gameObject.tag == "Arrow")
+                            {
+                                spawn = false;
+                            }
+                        }
+                    }
+
+                    if (spawn)
+                    {
+                        GameObject arrow = Instantiate(arrowPrefab, pos, Quaternion.identity);
+                        arrow.GetComponent<DirectionalArrow>().SetWorldPos(_map.WorldToGeoPosition(pos));
+                        arrow.GetComponent<DirectionalArrow>().SetMap(_map);
+                        arrow.GetComponent<DirectionalArrow>().SetUser(playerRef);
+                        arrows.Add(arrow);
+
+                        lastPos = pos;
+                    }
                 }
             }
 

@@ -26,10 +26,10 @@ public class DirectionalArrow : MonoBehaviour
             worldPos = _map.WorldToGeoPosition(transform.position);
         }
 
-        foreach (Transform child in transform)
-        {
-            //child.gameObject.GetComponent<MeshRenderer>().enabled = false;
-        }
+        //foreach (Transform child in transform)
+        //{
+        //    child.gameObject.GetComponent<MeshRenderer>().enabled = false;
+        //}
     }
 
     // Update is called once per frame
