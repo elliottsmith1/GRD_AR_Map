@@ -17,31 +17,72 @@ public class ARGuide : MonoBehaviour
     private float turnSpeed = 2.0f;
     private Vector3 targetPos;
 
+    private bool returningToPlayer = false;
+
     // Update is called once per frame
     void Update()
     {
-        if (Vector3.Distance(transform.position, player.transform.position) < 5)
+        if (Vector3.Distance(transform.position, player.transform.position) > 12)
         {
-            var rotation = Quaternion.LookRotation(dirFactory.GetFirstArrowPosition() - transform.position);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * turnSpeed);
+            returningToPlayer = true;            
+        }
 
-            speed = 10 / Vector3.Distance(transform.position, player.transform.position);
-
-            animator.SetFloat("speed", 1.0f + (vel * 10));            
-
-            transform.Translate(Vector3.forward * Time.deltaTime * speed);
-        }       
-        else if (Vector3.Distance(transform.position, player.transform.position) > 6)
+        if (returningToPlayer)
         {
-            var rotation = Quaternion.LookRotation(player.transform.position - transform.position);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * turnSpeed);
+            targetPos = player.transform.position;
 
-            speed = Vector3.Distance(transform.position, player.transform.position);
+            var rotation = Quaternion.LookRotation(targetPos - transform.position);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * turnSpeed);
 
             animator.SetFloat("speed", 1.0f + (vel * 10));
 
             transform.Translate(Vector3.forward * Time.deltaTime * speed);
+
+            if (Vector3.Distance(transform.position, player.transform.position) < 5)
+            {
+                returningToPlayer = false;
+            }
+            return;
         }
+
+        targetPos = Vector3.Lerp(dirFactory.GetFirstArrowPosition(), player.transform.position, 0.1f);
+
+        if (Vector3.Distance(transform.position, targetPos) > 1)
+        {
+            if (Vector3.Distance(transform.position, player.transform.position) < 10)
+            {
+                var rotation = Quaternion.LookRotation(targetPos - transform.position);
+                transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * turnSpeed);
+
+                animator.SetFloat("speed", 1.0f + (vel * 10));
+
+                transform.Translate(Vector3.forward * Time.deltaTime * speed);
+            }
+        }
+        
+
+        //if (Vector3.Distance(transform.position, player.transform.position) < 5)
+        //{
+        //    var rotation = Quaternion.LookRotation(dirFactory.GetFirstArrowPosition() - transform.position);
+        //    transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * turnSpeed);
+
+        //    speed = 10 / Vector3.Distance(transform.position, player.transform.position);
+
+        //    animator.SetFloat("speed", 1.0f + (vel * 10));            
+
+        //    transform.Translate(Vector3.forward * Time.deltaTime * speed);
+        //}       
+        //else if (Vector3.Distance(transform.position, player.transform.position) > 5)
+        //{
+        //    var rotation = Quaternion.LookRotation(player.transform.position - transform.position);
+        //    transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * turnSpeed);
+
+        //    speed = Vector3.Distance(transform.position, player.transform.position);
+
+        //    animator.SetFloat("speed", 1.0f + (vel * 10));
+
+        //    transform.Translate(Vector3.forward * Time.deltaTime * speed);
+        //}
     }
 
     void FixedUpdate()
