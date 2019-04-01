@@ -14,7 +14,7 @@ public class ARGuide : MonoBehaviour
     private float vel;
 
     private float speed = 2.0f;
-    private float turnSpeed = 2.0f;
+    private float turnSpeed = 5.0f;
     private Vector3 targetPos;
 
     private bool returningToPlayer = false;
@@ -36,6 +36,8 @@ public class ARGuide : MonoBehaviour
 
             animator.SetFloat("speed", 1.0f + (vel * 10));
 
+            speed = Vector3.Distance(transform.position, player.transform.position);
+
             transform.Translate(Vector3.forward * Time.deltaTime * speed);
 
             if (Vector3.Distance(transform.position, player.transform.position) < 5)
@@ -53,6 +55,8 @@ public class ARGuide : MonoBehaviour
             {
                 var rotation = Quaternion.LookRotation(targetPos - transform.position);
                 transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * turnSpeed);
+
+                speed = 10 / Vector3.Distance(transform.position, player.transform.position);
 
                 animator.SetFloat("speed", 1.0f + (vel * 10));
 

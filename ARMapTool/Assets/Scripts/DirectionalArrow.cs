@@ -25,49 +25,49 @@ public class DirectionalArrow : MonoBehaviour
         {
             worldPos = _map.WorldToGeoPosition(transform.position);
         }
-
-        //foreach (Transform child in transform)
-        //{
-        //    child.gameObject.GetComponent<MeshRenderer>().enabled = false;
-        //}
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (transform.localScale.y < 1)
+        {
+            float timer = Time.deltaTime;
+            transform.localScale += new Vector3(timer, timer, timer);
+        }
         transform.localPosition = _map.GeoToWorldPosition(worldPos, true);
 
-        //Vector3 newPos = transform.position;
-        //newPos.y = Mathf.Sin(Time.time) + intensity;
+        Vector3 newPos = transform.position;
+        newPos.y = Mathf.Sin(Time.time) + intensity;
 
-        //transform.position = newPos;
+        transform.position = newPos;
 
         transform.LookAt(nextPos);
 
-        if (!activated)
-        {
-            if (Vector3.Distance(user.transform.position, transform.position) < 10)
-            {
-                Activate();
-            }
-        }
-        else
-        {
-            if (Vector3.Distance(user.transform.position, transform.position) > 10)
-            {
-                if (queueForDestroy)
-                {
-                    Destroy(this.gameObject);
-                }
-                else
-                {
-                    Deactivate();
-                }
-            }
-        }
+        //if (!activated)
+        //{
+        //    if (Vector3.Distance(user.transform.position, transform.position) < 10)
+        //    {
+        //        Activate();
+        //    }
+        //}
+        //else
+        //{
+        //    if (Vector3.Distance(user.transform.position, transform.position) > 10)
+        //    {
+        //        if (queueForDestroy)
+        //        {
+        //            Destroy(this.gameObject);
+        //        }
+        //        else
+        //        {
+        //            Deactivate();
+        //        }
+        //    }
+        //}
     }
 
-    private void Activate()
+    public void Activate()
     {
         activated = true;
 

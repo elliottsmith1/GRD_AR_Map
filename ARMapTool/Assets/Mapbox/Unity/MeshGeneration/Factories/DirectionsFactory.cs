@@ -173,19 +173,20 @@ namespace Mapbox.Unity.MeshGeneration.Factories
         {
             foreach (GameObject aro in arrows)
             {
-                if (!aro.GetComponent<DirectionalArrow>().GetActivated())
-                {
-                    Destroy(aro);
-                }
-                else
-                {
-                    aro.GetComponent<DirectionalArrow>().SetQueueForDestroy(true);
-                }
+                Destroy(aro);
+                //if (!aro.GetComponent<DirectionalArrow>().GetActivated())
+                //{
+                //    Destroy(aro);
+                //}
+                //else
+                //{
+                //    aro.GetComponent<DirectionalArrow>().SetQueueForDestroy(true);
+                //}
             }
 
             arrows.Clear();                  
 
-            float x = 5;
+            float x = 10;
             Vector3 lastPos = _waypoints[0].position;
             foreach (Vector3 vpos in _mesh.vertices)
             {
@@ -193,10 +194,10 @@ namespace Mapbox.Unity.MeshGeneration.Factories
 
                 Vector3 pos = transform.TransformPoint(vpos);
 
-                if (Vector3.Distance(_waypoints[0].position, pos) < x)
-                {
-                    isNewturn = false;
-                }
+                //if (Vector3.Distance(_waypoints[0].position, pos) < x)
+                //{
+                //    isNewturn = false;
+                //}
 
                 foreach (GameObject aro in arrows)
                 {
@@ -210,17 +211,17 @@ namespace Mapbox.Unity.MeshGeneration.Factories
                 {
                     bool spawn = true;
 
-                    Collider[] hitColliders = Physics.OverlapSphere(pos, 5);
-                    foreach (Collider col in hitColliders)
-                    {
-                        if (col.gameObject != this.gameObject)
-                        {
-                            if (col.gameObject.tag == "Arrow")
-                            {
-                                spawn = false;
-                            }
-                        }
-                    }
+                    //Collider[] hitColliders = Physics.OverlapSphere(pos, 5);
+                    //foreach (Collider col in hitColliders)
+                    //{
+                    //    if (col.gameObject != this.gameObject)
+                    //    {
+                    //        if (col.gameObject.tag == "Arrow")
+                    //        {
+                    //            spawn = false;
+                    //        }
+                    //    }
+                    //}
 
                     if (spawn)
                     {
@@ -231,6 +232,16 @@ namespace Mapbox.Unity.MeshGeneration.Factories
                         arrows.Add(arrow);
 
                         lastPos = pos;
+                    }
+                }
+
+                int numAroToSpawn = 2;
+
+                for (int i = 0; i < arrows.Count; i++)
+                {
+                    if (i < numAroToSpawn)
+                    {
+                        arrows[i].GetComponent<DirectionalArrow>().Activate();
                     }
                 }
             }
@@ -263,7 +274,7 @@ namespace Mapbox.Unity.MeshGeneration.Factories
         {
             if (arrows.Count > 0)
             {
-                return arrows[0].transform.position;
+                return arrows[1].transform.position;
             }
 
             return Vector3.zero;
