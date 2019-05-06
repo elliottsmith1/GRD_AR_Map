@@ -63,30 +63,6 @@ public class ARGuide : MonoBehaviour
                 transform.Translate(Vector3.forward * Time.deltaTime * speed);
             }
         }
-        
-
-        //if (Vector3.Distance(transform.position, player.transform.position) < 5)
-        //{
-        //    var rotation = Quaternion.LookRotation(dirFactory.GetFirstArrowPosition() - transform.position);
-        //    transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * turnSpeed);
-
-        //    speed = 10 / Vector3.Distance(transform.position, player.transform.position);
-
-        //    animator.SetFloat("speed", 1.0f + (vel * 10));            
-
-        //    transform.Translate(Vector3.forward * Time.deltaTime * speed);
-        //}       
-        //else if (Vector3.Distance(transform.position, player.transform.position) > 5)
-        //{
-        //    var rotation = Quaternion.LookRotation(player.transform.position - transform.position);
-        //    transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * turnSpeed);
-
-        //    speed = Vector3.Distance(transform.position, player.transform.position);
-
-        //    animator.SetFloat("speed", 1.0f + (vel * 10));
-
-        //    transform.Translate(Vector3.forward * Time.deltaTime * speed);
-        //}
     }
 
     void FixedUpdate()

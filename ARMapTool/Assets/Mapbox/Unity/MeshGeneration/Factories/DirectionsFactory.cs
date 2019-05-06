@@ -267,8 +267,9 @@ namespace Mapbox.Unity.MeshGeneration.Factories
         {
             Vector3 pos = _pos;
             pos.y = 0;
-
             _waypoints[1].transform.position = pos;
+
+            Query();
         }
 
         public Vector3 GetFirstArrowPosition()

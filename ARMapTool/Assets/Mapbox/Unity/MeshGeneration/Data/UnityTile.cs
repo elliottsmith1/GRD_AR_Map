@@ -186,8 +186,8 @@ namespace Mapbox.Unity.MeshGeneration.Data
 			IsRecycled = false;
             //MeshRenderer.enabled = true;
 
-            gameObject.AddComponent<BoxCollider>();
-
+            BoxCollider col = gameObject.AddComponent<BoxCollider>();
+            col.size = new Vector3(400, 1, 400);
 
 			// Setup Loading as initial state - Unregistered
 			// When tile registers with factories, it will set the appropriate state.

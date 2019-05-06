@@ -21,6 +21,8 @@ public class MapControl : MonoBehaviour
 
     private Vector3 targetDestination;
 
+    private Vector3 tempMapPos;
+
     private void Start()
     {
         newDestinationUI.SetActive(false);
@@ -39,11 +41,18 @@ public class MapControl : MonoBehaviour
             if (!touching)
             {
                 touching = true;
+                tempMapPos = transform.position;
             }
         }
 
         if (touching)
         {
+            if (tempMapPos != transform.position)
+            {
+                touchTimer = 0.0f;
+                tempMapPos = transform.position;
+            }
+
             touchTimer += Time.deltaTime;
 
             if (touchTimer > touchTimeMax)
@@ -73,7 +82,6 @@ public class MapControl : MonoBehaviour
         if (Physics.Raycast(ray, out hit))
         {
             pos = hit.point;
-
             _dir.NewDestination(pos);
         }        
     }
